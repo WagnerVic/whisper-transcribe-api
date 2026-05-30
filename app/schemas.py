@@ -12,6 +12,7 @@ class TranscriptionSegment(BaseModel):
     start: float
     end: float
     text: str
+    speaker: Optional[str] = None
     words: Optional[List[WordTimestamp]] = None
 
 class TranscriptionResponse(BaseModel):

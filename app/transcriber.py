@@ -48,9 +48,10 @@ class Transcriber:
             return device
 
         try:
-            import torch
-            return "cuda" if torch.cuda.is_available() else "cpu"
-        except ImportError:
+            import ctranslate2
+            ctranslate2.get_supported_compute_types("cuda")
+            return "cuda"
+        except Exception:
             return "cpu"
 
     def transcribe(
@@ -59,33 +60,22 @@ class Transcriber:
         original_filename: str,
         language: Optional[str] = None,
         speed_factor: float = 1.0,
+        on_progress: Optional[callable] = None,
     ) -> TranscriptionResponse:
         start_time = time.time()
 
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            TimeElapsedColumn(),
-            console=console,
-            transient=True,
-        ) as progress:
-            progress.add_task("Transcrevendo...", total=None)
+        segments_iter, info = self.model.transcribe(
+            audio_path,
+            language=language,
+            vad_filter=True,
+            word_timestamps=True,
+        )
 
-            segments_iter, info = self.model.transcribe(
-                audio_path,
-                language=language,
-                vad_filter=True,
-                word_timestamps=True,
-            )
-
-            raw_segments = list(segments_iter)
-
-        elapsed = time.time() - start_time
-
+        total_duration = info.duration
         pydantic_segments = []
         full_text_parts = []
 
-        for seg in raw_segments:
+        for seg in segments_iter:
             words = None
             if seg.words:
                 words = [
@@ -109,6 +99,17 @@ class Transcriber:
             )
             full_text_parts.append(seg.text.strip())
 
+            if on_progress and total_duration > 0:
+                pct = min(seg.end / total_duration, 1.0)
+                on_progress(
+                    current_sec=seg.end * speed_factor,
+                    total_sec=total_duration * speed_factor,
+                    percent=pct,
+                    segment_text=seg.text.strip(),
+                )
+
+        elapsed = time.time() - start_time
+
         return TranscriptionResponse(
             filename=original_filename,
             language=info.language,
@@ -120,24 +121,40 @@ class Transcriber:
             processing_time_seconds=round(elapsed, 2),
         )
 
-    def export_txt(self, result: TranscriptionResponse, output_dir: str) -> str:
-        out = Path(output_dir) / f"{Path(result.filename).stem}.txt"
-        out.write_text(result.text, encoding="utf-8")
+    def export_txt(self, result: TranscriptionResponse, output_dir: str, export_name: str = None) -> str:
+        stem = export_name or Path(result.filename).stem
+        out = Path(output_dir) / f"{stem}.txt"
+        
+        # Reconstrói o texto se tiver diarização
+        has_speaker = any(s.speaker for s in result.segments)
+        if has_speaker:
+            lines = []
+            for seg in result.segments:
+                speaker_prefix = f"[{seg.speaker}] " if seg.speaker else ""
+                lines.append(f"{speaker_prefix}{seg.text.strip()}")
+            text_content = "\n".join(lines)
+        else:
+            text_content = result.text
+            
+        out.write_text(text_content, encoding="utf-8")
         return str(out)
 
-    def export_srt(self, result: TranscriptionResponse, output_dir: str) -> str:
-        out = Path(output_dir) / f"{Path(result.filename).stem}.srt"
+    def export_srt(self, result: TranscriptionResponse, output_dir: str, export_name: str = None) -> str:
+        stem = export_name or Path(result.filename).stem
+        out = Path(output_dir) / f"{stem}.srt"
         lines = []
         for i, seg in enumerate(result.segments, start=1):
             lines.append(str(i))
             lines.append(f"{_fmt_srt(seg.start)} --> {_fmt_srt(seg.end)}")
-            lines.append(seg.text)
+            speaker_prefix = f"[{seg.speaker}] " if seg.speaker else ""
+            lines.append(f"{speaker_prefix}{seg.text.strip()}")
             lines.append("")
         out.write_text("\n".join(lines), encoding="utf-8")
         return str(out)
 
-    def export_json(self, result: TranscriptionResponse, output_dir: str) -> str:
-        out = Path(output_dir) / f"{Path(result.filename).stem}.json"
+    def export_json(self, result: TranscriptionResponse, output_dir: str, export_name: str = None) -> str:
+        stem = export_name or Path(result.filename).stem
+        out = Path(output_dir) / f"{stem}.json"
         out.write_text(result.model_dump_json(indent=2), encoding="utf-8")
         return str(out)
 

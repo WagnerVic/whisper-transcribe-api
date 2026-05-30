@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment variables
+.env
+.env.local
+
+# Uploads and output (user data)
+uploads/*
+output/*
+!uploads/.gitkeep
+!output/.gitkeep
+
+# Whisper model cache
+models/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

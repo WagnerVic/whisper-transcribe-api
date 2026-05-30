@@ -1,0 +1,13 @@
+[project]
+name = "whisper-transcribe-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.136.3",
+    "faster-whisper>=1.2.1",
+    "python-multipart>=0.0.29",
+    "rich>=15.0.0",
+    "uvicorn>=0.48.0",
+]

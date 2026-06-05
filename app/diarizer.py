@@ -6,7 +6,7 @@ Usa pyannote.audio com modelo speaker-diarization-3.1.
 import logging
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Any, Callable, Optional
 
 from dotenv import load_dotenv
 
@@ -46,8 +46,6 @@ def get_diarization_pipeline():
     return _pipeline
 
 
-from typing import Optional, Callable
-
 class CustomProgressHook:
     def __init__(self, on_progress: Callable[[str, int, int], None]):
         self.on_progress = on_progress
@@ -58,7 +56,7 @@ class CustomProgressHook:
     def __exit__(self, *args):
         pass
 
-    def __call__(self, step_name: str, step_artifact: any, file: dict = None, total: int = None, completed: int = None):
+    def __call__(self, step_name: str, step_artifact: Any, file: dict = None, total: int = None, completed: int = None):
         if completed is None:
             completed = total = 1
         self.on_progress(step_name, completed, total)

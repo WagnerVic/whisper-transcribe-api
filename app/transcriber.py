@@ -1,3 +1,4 @@
+import threading
 import time
 import logging
 from pathlib import Path
@@ -5,17 +6,11 @@ from typing import Optional
 
 from faster_whisper import WhisperModel
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 
 from app.schemas import TranscriptionResponse, TranscriptionSegment, WordTimestamp
 
 logger = logging.getLogger(__name__)
 console = Console()
-
-VIDEO_EXTENSIONS = {".mp4", ".mkv", ".avi", ".mov", ".webm", ".flv", ".wmv"}
-AUDIO_EXTENSIONS = {".mp3", ".wav", ".flac", ".ogg", ".aac", ".m4a", ".opus"}
-
-SUPPORTED_EXTENSIONS = VIDEO_EXTENSIONS | AUDIO_EXTENSIONS
 
 
 class Transcriber:
@@ -61,6 +56,7 @@ class Transcriber:
         language: Optional[str] = None,
         speed_factor: float = 1.0,
         on_progress: Optional[callable] = None,
+        stop_event: Optional[threading.Event] = None,
     ) -> TranscriptionResponse:
         start_time = time.time()
 
@@ -68,7 +64,10 @@ class Transcriber:
             audio_path,
             language=language,
             vad_filter=True,
+            vad_parameters={"min_silence_duration_ms": 500},
             word_timestamps=True,
+            beam_size=5,
+            condition_on_previous_text=False,
         )
 
         total_duration = info.duration
@@ -76,6 +75,10 @@ class Transcriber:
         full_text_parts = []
 
         for seg in segments_iter:
+            if stop_event and stop_event.is_set():
+                logger.info("Transcrição interrompida via stop_event.")
+                break
+
             words = None
             if seg.words:
                 words = [

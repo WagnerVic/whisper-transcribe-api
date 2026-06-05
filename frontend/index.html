@@ -9,54 +9,87 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="app">
-        <header class="header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
-                        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-                        <line x1="12" x2="12" y1="19" y2="22"/>
-                    </svg>
-                </div>
-                <h1>Whisper Transcribe</h1>
-            </div>
-            <div class="header-right">
-                <div class="gpu-widget" id="gpuWidget">
-                    <div class="gpu-bar-wrapper">
-                        <span class="gpu-label">VRAM</span>
-                        <div class="gpu-bar-track">
-                            <div class="gpu-bar-fill" id="gpuBarFill"></div>
-                        </div>
-                        <span class="gpu-value" id="gpuValue">—</span>
-                    </div>
-                    <div class="gpu-stats">
-                        <span id="gpuUtil">GPU 0%</span>
-                        <span id="gpuTemp">— °C</span>
-                    </div>
-                </div>
-                <div class="status-badge" id="statusBadge">
-                    <span class="status-dot"></span>
-                    <span class="status-text">Conectando...</span>
-                </div>
-            </div>
-        </header>
+<div class="app">
 
-        <main class="main">
-            <!-- Upload Area -->
-            <section class="upload-section" id="uploadSection">
+    <!-- ── Header ─────────────────────────────────────────────── -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/>
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                    <line x1="12" x2="12" y1="19" y2="22"/>
+                </svg>
+            </div>
+            <h1>Whisper Transcribe</h1>
+        </div>
+        <div class="header-right">
+            <div class="gpu-widget" id="gpuWidget">
+                <div class="gpu-bar-wrapper">
+                    <span class="gpu-label">VRAM</span>
+                    <div class="gpu-bar-track">
+                        <div class="gpu-bar-fill" id="gpuBarFill"></div>
+                    </div>
+                    <span class="gpu-value" id="gpuValue">—</span>
+                </div>
+                <div class="gpu-stats">
+                    <span id="gpuUtil">GPU 0%</span>
+                    <span id="gpuTemp">— °C</span>
+                </div>
+            </div>
+            <div class="status-badge" id="statusBadge">
+                <span class="status-dot"></span>
+                <span class="status-text">Conectando...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ── Tab bar ────────────────────────────────────────────── -->
+    <nav class="tab-bar" id="tabBar">
+        <button class="tab-btn active" data-tab="transcribe">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            Transcrever
+        </button>
+        <button class="tab-btn" data-tab="history">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/>
+                <path d="M12 7v5l4 2"/>
+            </svg>
+            Histórico
+        </button>
+        <button class="tab-btn" data-tab="settings">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+                <circle cx="12" cy="12" r="3"/>
+            </svg>
+            Config
+        </button>
+        <div class="tab-indicator" id="tabIndicator"></div>
+    </nav>
+
+    <!-- ── Main ───────────────────────────────────────────────── -->
+    <main>
+
+        <!-- ===== PANEL: Transcrever ===== -->
+        <div class="panel active" id="panel-transcribe">
+
+            <!-- Upload Section -->
+            <section id="uploadSection" class="section-gap">
+
                 <div class="upload-zone" id="uploadZone">
                     <div class="upload-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                             <polyline points="17 8 12 3 7 8"/>
                             <line x1="12" x2="12" y1="3" y2="15"/>
                         </svg>
                     </div>
-                    <h2>Selecione ou arraste um vídeo</h2>
-                    <p class="upload-hint">MP4, MKV, AVI, MOV, MP3, WAV, FLAC — até 2 GB</p>
-                    <button class="btn btn-primary" id="selectFileBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <h2>Solte o arquivo aqui</h2>
+                    <p class="upload-hint">MP4 · MKV · MOV · MP3 · WAV · FLAC e mais — até 2 GB</p>
+                    <button class="btn btn-primary" id="selectFileBtn" style="width:auto;padding:9px 20px;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/>
                             <polyline points="13 2 13 9 20 9"/>
                         </svg>
@@ -65,19 +98,39 @@
                     <input type="file" id="fileInput" accept=".mp4,.mkv,.avi,.mov,.webm,.flv,.wmv,.mp3,.wav,.flac,.ogg,.aac,.m4a,.opus" hidden>
                 </div>
 
+                <!-- File card (aparece após seleção) -->
+                <div class="file-card hidden" id="fileCard">
+                    <div class="file-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="23 7 16 12 23 17 23 7"/>
+                            <rect width="15" height="14" x="1" y="5" rx="2" ry="2"/>
+                        </svg>
+                    </div>
+                    <div class="file-details">
+                        <span class="file-name" id="fileName">—</span>
+                        <span class="file-size" id="fileSize">—</span>
+                    </div>
+                    <button class="btn-icon" id="removeFileBtn" title="Remover">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Opções -->
                 <div class="options-row options-4col">
                     <div class="option-group">
                         <label for="modelSelect">Modelo</label>
                         <select id="modelSelect">
-                            <option value="large-v3-turbo" selected>⚡ Rápido — large-v3-turbo</option>
-                            <option value="large-v3">🎯 Preciso — large-v3</option>
-                            <option value="medium">🏃 Leve — medium</option>
+                            <option value="large-v3-turbo" selected>⚡ large-v3-turbo</option>
+                            <option value="large-v3">🎯 large-v3</option>
+                            <option value="medium">🏃 medium</option>
                         </select>
                     </div>
                     <div class="option-group">
                         <label for="languageSelect">Idioma</label>
                         <select id="languageSelect">
-                            <option value="">Auto-detectar</option>
+                            <option value="">Auto</option>
                             <option value="pt" selected>Português</option>
                             <option value="en">English</option>
                             <option value="es">Español</option>
@@ -96,46 +149,28 @@
                     <div class="option-group">
                         <label for="diarizeSelect">Falantes</label>
                         <select id="diarizeSelect">
-                            <option value="false" selected>Não identificar</option>
-                            <option value="true">Identificar (pyannote)</option>
+                            <option value="false" selected>Desativado</option>
+                            <option value="true">pyannote</option>
                         </select>
                     </div>
                 </div>
-            </section>
 
-            <!-- File Selected -->
-            <section class="file-info hidden" id="fileInfo">
-                <div class="file-card">
-                    <div class="file-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polygon points="23 7 16 12 23 17 23 7"/>
-                            <rect width="15" height="14" x="1" y="5" rx="2" ry="2"/>
-                        </svg>
-                    </div>
-                    <div class="file-details">
-                        <span class="file-name" id="fileName">—</span>
-                        <span class="file-size" id="fileSize">—</span>
-                    </div>
-                    <button class="btn-icon" id="removeFileBtn" title="Remover arquivo">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="option-group" style="margin-bottom: 16px;">
+                <div class="option-group">
                     <label for="projectName">Nome da transcrição</label>
-                    <input type="text" id="projectName" placeholder="ex: reuniao-sprint-15" class="text-input">
+                    <input type="text" id="projectName" placeholder="ex: reuniao-sprint-15  (opcional)" class="text-input">
                 </div>
-                <button class="btn btn-primary btn-lg" id="transcribeBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+                <button class="btn btn-primary btn-lg" id="transcribeBtn" disabled>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <polygon points="5 3 19 12 5 21 5 3"/>
                     </svg>
                     Transcrever
                 </button>
+
             </section>
 
-            <!-- Processing with live logs -->
-            <section class="processing hidden" id="processingSection">
+            <!-- Processing -->
+            <section class="hidden" id="processingSection">
                 <div class="processing-card">
                     <div class="processing-top">
                         <div class="spinner"></div>
@@ -149,15 +184,15 @@
                     </div>
                     <span class="progress-label" id="progressLabel">0%</span>
                     <button class="btn btn-cancel" id="cancelBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                         </svg>
-                        Cancelar
+                        Cancelar transcrição
                     </button>
                 </div>
-                <div class="log-panel">
+                <div class="log-panel" style="margin-top:12px;">
                     <div class="log-header">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
                         </svg>
                         <span>Pipeline</span>
@@ -167,13 +202,13 @@
             </section>
 
             <!-- Result -->
-            <section class="result hidden" id="resultSection">
+            <section class="hidden" id="resultSection">
                 <div class="result-header">
-                    <h2>Transcrição completa</h2>
+                    <h2>Transcrição</h2>
                     <div class="result-meta">
-                        <span class="meta-chip" id="metaLang">—</span>
-                        <span class="meta-chip" id="metaDuration">—</span>
-                        <span class="meta-chip" id="metaTime">—</span>
+                        <span class="chip chip-purple" id="metaLang">—</span>
+                        <span class="chip" id="metaDuration">—</span>
+                        <span class="chip" id="metaTime">—</span>
                     </div>
                 </div>
                 <div class="result-text-wrapper">
@@ -181,22 +216,132 @@
                 </div>
                 <div class="result-actions">
                     <button class="btn btn-outline" id="copyBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
                             <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                         </svg>
-                        Copiar texto
+                        Copiar
                     </button>
-                    <button class="btn btn-outline" id="newBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <button class="btn btn-ghost" id="newBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                         </svg>
-                        Nova transcrição
+                        Nova
                     </button>
+                    <div class="result-actions hidden" id="downloadBar" style="margin-left:auto;"></div>
                 </div>
             </section>
-        </main>
-    </div>
-    <script src="app.js"></script>
+
+        </div><!-- /panel-transcribe -->
+
+        <!-- ===== PANEL: Histórico ===== -->
+        <div class="panel" id="panel-history">
+            <div class="history-header">
+                <h2>Histórico</h2>
+                <button class="btn btn-ghost" id="refreshHistoryBtn" style="font-size:12px;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                        <path d="M3 3v5h5"/>
+                    </svg>
+                    Atualizar
+                </button>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-state">
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/>
+                    </svg>
+                    <p>Nenhuma transcrição ainda</p>
+                    <span>As transcrições salvas aparecerão aqui</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PANEL: Config ===== -->
+        <div class="panel" id="panel-settings">
+
+            <div class="settings-section">
+                <div class="settings-section-header">Padrões de transcrição</div>
+
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span>Modelo padrão</span>
+                        <small>Modelo carregado ao abrir o app</small>
+                    </div>
+                    <select id="cfg-model">
+                        <option value="large-v3-turbo">⚡ large-v3-turbo</option>
+                        <option value="large-v3">🎯 large-v3</option>
+                        <option value="medium">🏃 medium</option>
+                    </select>
+                </div>
+
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span>Idioma padrão</span>
+                        <small>Usado quando nenhum idioma é selecionado</small>
+                    </div>
+                    <select id="cfg-language">
+                        <option value="">Auto-detectar</option>
+                        <option value="pt">Português</option>
+                        <option value="en">English</option>
+                        <option value="es">Español</option>
+                    </select>
+                </div>
+
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span>Speed-up padrão</span>
+                        <small>Aceleração aplicada antes da transcrição</small>
+                    </div>
+                    <select id="cfg-speed">
+                        <option value="1.0">1.0× (original)</option>
+                        <option value="1.5">1.5×</option>
+                        <option value="2.0">2.0×</option>
+                        <option value="2.5">2.5×</option>
+                        <option value="3.0">3.0×</option>
+                    </select>
+                </div>
+
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span>Diarização padrão</span>
+                        <small>Identificação de falantes via pyannote</small>
+                    </div>
+                    <select id="cfg-diarize">
+                        <option value="false">Desativada</option>
+                        <option value="true">Ativada</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="settings-save-row">
+                <span class="settings-saved-msg" id="savedMsg">✓ Configurações salvas</span>
+                <button class="btn btn-primary" id="saveSettingsBtn" style="width:auto;">
+                    Salvar configurações
+                </button>
+            </div>
+
+            <div class="settings-section" style="margin-top:8px;">
+                <div class="settings-section-header">Memória GPU</div>
+                <div class="settings-row">
+                    <div class="settings-label">
+                        <span>Descarregar modelo</span>
+                        <small>Remove o modelo da VRAM sem parar o servidor</small>
+                    </div>
+                    <button class="btn btn-outline" id="unloadModelBtn" style="width:auto;flex-shrink:0;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/>
+                        </svg>
+                        Liberar VRAM
+                    </button>
+                </div>
+                <span class="settings-saved-msg" id="unloadMsg" style="margin-top:6px;"></span>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+<script src="app.js"></script>
 </body>
 </html>
